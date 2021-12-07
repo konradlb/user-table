@@ -1,17 +1,18 @@
 import React from "react";
-// import "react-router-d";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Container } from "react-bootstrap";
 
 import UsersTable from "./components/UsersTable/UsersTable";
-import TableHeader from "./components/UsersTable/TableHeader";
+import Footer from "./components/Footer/Footer";
+import Header from "./components/Header/Header";
 
 function App() {
   return (
     <>
       <Container>
-        <TableHeader />
-
+        <Header />
         <UsersTable />
+        <Footer />
       </Container>
     </>
   );
