@@ -1,0 +1,35 @@
+.table-header {
+  background: var(--bs-cyan);
+  color: var(--bs-gray-100);
+  padding: 20px 25px;
+
+  .btn {
+    float: right;
+    background-color: var(--bs-teal);
+    border-color: var(--bs-teal);
+    svg {
+      width: 18px;
+      margin: 7px;
+    }
+  }
+}
+
+.table-body {
+  .actions-row {
+    .edit {
+      color: var(--bs-teal);
+    }
+
+    .delete {
+      color: var(--bs-danger);
+    }
+    button {
+      background: none;
+      border: none;
+      svg {
+        height: 18px;
+        margin: 5px;
+      }
+    }
+  }
+}
