@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
-import { Button, Col, Container, Jumbotron, Row, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 import TableHeader from "./TableHeader";
 import { ReactComponent as Trash } from "../../images/trash-solid-FA.svg";
 import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg";
 
-import { users } from "./../users";
+// import { users } from "./../users";
 
 function UsersTable() {
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const [users, setUsers] = useState([]);
+
+  const fetchUsers = async () => {
+    const users = await (
+      await fetch("http://jsonplaceholder.typicode.com/users")
+    ).json();
+    console.log(users);
+    setUsers(users);
+  };
+
   return (
     <>
       <TableHeader />
@@ -25,9 +40,13 @@ function UsersTable() {
         </thead>
         <tbody className="table-body">
           {users.map((user) => (
-            <tr>
+            <tr key={user.id}>
               <td>{user.id}</td>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`/user-deail/${user.id}`} className="edit">
+                  {user.name}
+                </Link>
+              </td>
               <td>{user.username}</td>
               <td>{user.email}</td>
               <td className="actions-row">
