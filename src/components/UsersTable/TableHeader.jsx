@@ -9,7 +9,7 @@ function TableHeader() {
         <h2>Manage users</h2>
       </Col>
       <Col>
-        <a href="#" className="btn btn-success">
+        <a href="/ppp" className="btn btn-success">
           <PlusIcon />
           <span>Add User</span>
         </a>

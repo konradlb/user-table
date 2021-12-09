@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+import { setUsers } from "../../redux/actions/userActions";
 import TableHeader from "./TableHeader";
 import { ReactComponent as Trash } from "../../images/trash-solid-FA.svg";
 import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg";
 
-// import { users } from "./../users";
-
 function UsersTable() {
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const users = useSelector((state) => state).allUsers.users;
 
-  const [users, setUsers] = useState([]);
+  const dispatch = useDispatch();
 
   const fetchUsers = async () => {
     const users = await (
       await fetch("http://jsonplaceholder.typicode.com/users")
     ).json();
     console.log(users);
-    setUsers(users);
+    dispatch(setUsers(users));
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <>
