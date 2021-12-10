@@ -1,32 +1,24 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import { setUsers } from "../../redux/actions/userActions";
+import { fetchUsers } from "../../redux";
 import TableHeader from "./TableHeader";
 import { ReactComponent as Trash } from "../../images/trash-solid-FA.svg";
 import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg";
 
-function UsersTable() {
-  const users = useSelector((state) => state).allUsers.users;
-
-  const dispatch = useDispatch();
-
-  const fetchUsers = async () => {
-    const users = await (
-      await fetch("http://jsonplaceholder.typicode.com/users")
-    ).json();
-    console.log(users);
-    dispatch(setUsers(users));
-  };
-
+function UsersTable({ usersData, fetchUsers }) {
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  return (
+  return usersData.loading ? (
+    <h2>Loading</h2>
+  ) : usersData.error ? (
+    <h2>{usersData.error}</h2>
+  ) : (
     <>
       <TableHeader />
 
@@ -41,7 +33,7 @@ function UsersTable() {
           </tr>
         </thead>
         <tbody className="table-body">
-          {users.map((user) => (
+          {usersData.users.map((user) => (
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>
@@ -67,4 +59,14 @@ function UsersTable() {
   );
 }
 
-export default UsersTable;
+const mapStateToProps = (state) => {
+  return { usersData: state.users };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUsers: () => dispatch(fetchUsers()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UsersTable);

@@ -1,20 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
 
-function UserDetail({ match }) {
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const [user, setUser] = useState(null);
-
-  const fetchUser = async () => {
-    const user = await (
-      await fetch(
-        `http://jsonplaceholder.typicode.com/users/${match.params.id}`
-      )
-    ).json();
-    setUser(user);
-  };
+function UserDetail({ match, usersData }) {
+  const user = usersData.users[match.params.id];
 
   return (
     <div>
@@ -24,4 +12,8 @@ function UserDetail({ match }) {
   );
 }
 
-export default UserDetail;
+const mapStateToProps = (state) => {
+  return { usersData: state.users };
+};
+
+export default connect(mapStateToProps)(UserDetail);
