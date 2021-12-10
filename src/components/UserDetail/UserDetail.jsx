@@ -1,19 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-function UserDetail({ match, usersData }) {
-  const user = usersData.users[match.params.id];
+import { fetchUser } from "../../redux";
+
+function UserDetail({ match, userData, fetchUser }) {
+  useEffect(() => {
+    fetchUser(match.params.id);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div>
-      <h3>match.params.id: {match.params.id}</h3>
-      <h3>user: {user?.username}</h3>
-    </div>
+    <>
+      <div>
+        <h3>Name: {userData.user.username}</h3>
+        <h3>Username: {userData.user.username}</h3>
+        <h3>Email: {userData.user.email}</h3>
+      </div>
+    </>
   );
 }
 
 const mapStateToProps = (state) => {
-  return { usersData: state.users };
+  return { usersData: state.users, userData: state.user };
 };
 
-export default connect(mapStateToProps)(UserDetail);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUser: (userId) => dispatch(fetchUser(userId)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetail);

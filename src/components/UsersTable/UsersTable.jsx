@@ -12,7 +12,7 @@ import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg"
 function UsersTable({ usersData, fetchUsers }) {
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return usersData.loading ? (
     <h2>Loading</h2>
@@ -47,7 +47,12 @@ function UsersTable({ usersData, fetchUsers }) {
                 <button className="edit">
                   <UserEdit />
                 </button>
-                <button className="delete">
+                <button
+                  className="delete"
+                  onClick={() => {
+                    console.log("delete");
+                  }}
+                >
                   <Trash />
                 </button>
               </td>

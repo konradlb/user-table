@@ -1,39 +1,45 @@
 import { userActionTypes } from "./userTypes";
 
-export const fetchUsersRequest = () => {
+export const fetchUserRequest = () => {
   return {
-    type: userActionTypes.FETCH_USERS_REQUEST,
+    type: userActionTypes.FETCH_USER_REQUEST,
   };
 };
 
-export const fetchUsersSuccess = (users) => {
+export const fetchUserSuccess = (user) => {
   return {
-    type: userActionTypes.FETCH_USERS_SUCCESS,
-    payload: users,
+    type: userActionTypes.FETCH_USER_SUCCESS,
+    payload: user,
   };
 };
 
-export const fetchUsersFailure = (error) => {
+export const fetchUserFailure = (error) => {
   return {
-    type: userActionTypes.FETCH_USERS_FAILURE,
+    type: userActionTypes.FETCH_USER_FAILURE,
     payload: error,
   };
 };
 
-export const fetchUsers = () => {
-  return (dispatch) => {
-    dispatch(fetchUsersRequest);
+export const deleteUserRequest = () => {
+  return {
+    type: userActionTypes.FETCH_USER_REQUEST,
+  };
+};
 
-    fetch("http://jsonplaceholder.typicode.com/users")
+export const fetchUser = (userId) => {
+  return (dispatch) => {
+    dispatch(fetchUserRequest);
+
+    fetch(`http://jsonplaceholder.typicode.com/users/${userId}`)
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
-      .then((users) => {
-        dispatch(fetchUsersSuccess(users));
+      .then((user) => {
+        dispatch(fetchUserSuccess(user));
       })
       .catch((error) => {
-        dispatch(fetchUsersFailure(error));
+        dispatch(fetchUserFailure(error));
       });
   };
 };
