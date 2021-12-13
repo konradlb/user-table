@@ -12,10 +12,25 @@ const reducer = (state = initialState, action) => {
       return { ...state, loading: true };
 
     case userActionTypes.FETCH_USER_SUCCESS:
-      return { loading: false, user: action.payload, error: "" };
+      return { ...state, loading: false, user: action.payload, error: "" };
 
     case userActionTypes.FETCH_USER_FAILURE:
-      return { loading: false, user: [], error: action.payload };
+      return { ...state, loading: false, user: [], error: action.payload };
+
+    case userActionTypes.DELETE_USER_SUCCESS:
+      const deletedUsers = state.users.filter(
+        (user) => user.id !== action.payload.id
+      );
+      return {
+        ...state,
+        loading: false,
+        users: deletedUsers,
+        error: action.payload,
+      };
+
+    case userActionTypes.DELETE_USER_FAILURE:
+      return { ...state, loading: false, user: [], error: action.payload };
+
     default:
       return state;
   }

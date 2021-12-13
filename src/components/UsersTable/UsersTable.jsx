@@ -4,14 +4,14 @@ import { connect } from "react-redux";
 import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import { fetchUsers } from "../../redux";
+import { fetchUsers, deleteUser } from "../../redux";
 import TableHeader from "./TableHeader";
 import { ReactComponent as Trash } from "../../images/trash-solid-FA.svg";
 import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg";
 
-function UsersTable({ usersData, fetchUsers }) {
+function UsersTable({ usersData, onFetchUsers, onDeleteUser }) {
   useEffect(() => {
-    fetchUsers();
+    onFetchUsers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return usersData.loading ? (
@@ -50,7 +50,7 @@ function UsersTable({ usersData, fetchUsers }) {
                 <button
                   className="delete"
                   onClick={() => {
-                    console.log("delete");
+                    onDeleteUser(user.id);
                   }}
                 >
                   <Trash />
@@ -70,7 +70,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchUsers: () => dispatch(fetchUsers()),
+    onFetchUsers: () => dispatch(fetchUsers()),
+    onDeleteUser: (userId) => dispatch(deleteUser(userId)),
   };
 };
 
