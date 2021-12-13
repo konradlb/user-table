@@ -19,7 +19,7 @@ function App() {
             component={(props) => <UsersTable {...props} />}
           />
           <Route
-            path="/user-deail/:id"
+            path="/user-detail/:id"
             component={(props) => <UserDetail {...props} />}
           />
         </Switch>

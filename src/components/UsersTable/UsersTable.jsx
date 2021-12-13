@@ -37,7 +37,7 @@ function UsersTable({ usersData, onFetchUsers, onDeleteUser }) {
             <tr key={user.id}>
               <td>{user.id}</td>
               <td>
-                <Link to={`/user-deail/${user.id}`} className="edit">
+                <Link to={`/user-detail/${user.id}`} className="edit">
                   {user.name}
                 </Link>
               </td>
