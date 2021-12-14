@@ -1,18 +1,48 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-import { Table } from "react-bootstrap";
+import { Table, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import { fetchUsers, deleteUser } from "../../redux";
+import { fetchUsers, deleteUser, deleteUserAlertClose } from "../../redux";
 import TableHeader from "./TableHeader";
 import { ReactComponent as Trash } from "../../images/trash-solid-FA.svg";
 import { ReactComponent as UserEdit } from "../../images/user-edit-solid-FA.svg";
 
-function UsersTable({ usersData, onFetchUsers, onDeleteUser }) {
+function UsersTable({
+  usersData,
+  userData,
+  onFetchUsers,
+  onDeleteUser,
+  onDeleteUserAlertClose,
+}) {
   useEffect(() => {
     onFetchUsers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  let alertDelay;
+  if (userData.showDeleteAlert) {
+    alertDelay = setTimeout(() => {
+      onDeleteUserAlertClose();
+    }, 2000);
+  }
+
+  const handleCloseDeleteAlert = () => {
+    onDeleteUserAlertClose();
+    clearTimeout(alertDelay);
+  };
+
+  const deleteUserAlert = userData.showDeleteAlert && (
+    <Alert variant="danger" onClose={handleCloseDeleteAlert} dismissible>
+      <Alert.Heading>
+        User
+        {` ${
+          usersData.users[userData.afterDelete.responseData.userId]?.username
+        } `}
+        was deleted
+      </Alert.Heading>
+    </Alert>
+  );
 
   return usersData.loading ? (
     <h2>Loading</h2>
@@ -20,8 +50,8 @@ function UsersTable({ usersData, onFetchUsers, onDeleteUser }) {
     <h2>{usersData.error}</h2>
   ) : (
     <>
+      {deleteUserAlert}
       <TableHeader />
-
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -65,12 +95,13 @@ function UsersTable({ usersData, onFetchUsers, onDeleteUser }) {
 }
 
 const mapStateToProps = (state) => {
-  return { usersData: state.users };
+  return { usersData: state.users, userData: state.user };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onFetchUsers: () => dispatch(fetchUsers()),
+    onDeleteUserAlertClose: () => dispatch(deleteUserAlertClose()),
     onDeleteUser: (userId) => dispatch(deleteUser(userId)),
   };
 };

@@ -23,7 +23,7 @@ export const fetchUserFailure = (error) => {
 
 export const fetchUser = (userId) => {
   return (dispatch) => {
-    dispatch(fetchUserRequest);
+    dispatch(fetchUserRequest());
 
     fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
       .then((response) => {
@@ -41,10 +41,22 @@ export const fetchUser = (userId) => {
 
 // deleteUser------------------------------------------
 
+export const deleteUserRequest = () => {
+  return {
+    type: userActionTypes.DELETE_USER_REQUEST,
+  };
+};
+
 export const deleteUserSuccess = (responseData) => {
   return {
     type: userActionTypes.DELETE_USER_SUCCESS,
     payload: { responseData: responseData },
+  };
+};
+
+export const deleteUserAlertClose = () => {
+  return {
+    type: userActionTypes.DELETE_USER_ALERT_CLOSE,
   };
 };
 
@@ -56,23 +68,17 @@ export const deleteUserFailure = (error) => {
 };
 
 export const deleteUser = (userId) => {
-  console.log("(deleteUser = userId)");
-  console.log(userId);
-
   return (dispatch) => {
+    dispatch(deleteUserRequest());
+
     fetch(`https://jsonplaceholder.typicode.com/users/11`, {
       method: "DELETE",
     })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
-        console.log(response.json());
-        return response.json();
+        dispatch(deleteUserSuccess({ userId: userId, success: response.ok }));
       })
-      .then((responseData) => {
-        dispatch(
-          deleteUserSuccess({ userId: userId, success: responseData.ok })
-        );
-      })
+
       .catch((error) => {
         dispatch(deleteUserFailure(error));
       });
